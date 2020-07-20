@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import Products from './Products';
 
@@ -12,20 +13,13 @@ class Home extends Component {
     };
   }
   componentDidMount() {
-    fetch('http://localhost:3001/products/')
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          this.setState({
-            products: result['docs'],
-            loading: false,
-          });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    axios.get('http://localhost:3001/products/').then((res) => {
+      console.log(res)
+      this.setState({
+        products: res.data.docs,
+        loading: false,
+      });
+    });
   }
 
   render() {
@@ -34,7 +28,9 @@ class Home extends Component {
         {this.state.loading && <div>Loading ...</div>}
         {!this.state.loading && (
           <div>
-            {this.state.products.map(producto => <Products data={[producto]} />)}
+            {this.state.products.map((producto) => (
+              <Products data={[producto]} />
+            ))}
           </div>
         )}
       </div>
