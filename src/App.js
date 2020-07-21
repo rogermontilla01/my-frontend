@@ -10,48 +10,46 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      menuOptions: [
-        {
-          path: '/',
-          label: 'Home',
-        },
-        {
-          path: '/login',
-          label: 'Login',
-        },
-        {
-          path: '/signup',
-          label:'Signup'
-        }
-      ],
+      menuOptions: [],
     };
   }
-
-  handleMenu = (login)=>{
-    if(login){
-      this.setState({menuOptions:[
-        {
-          path: '/',
-          label: 'Home',
-        }
-      ]})
+  componentDidMount(){
+    if(localStorage.getItem('token')){
+      this.handleMenu(true)
     }else{
-      this.setState({menuOptions:[
-        {
-          path: '/',
-          label: 'Home',
-        },
-        {
-          path: '/login',
-          label: 'Login',
-        },
-        {
-          path: '/signup',
-          label:'Signup'
-        }
-      ]})
+      this.handleMenu(false)
     }
   }
+
+  handleMenu = (login) => {
+    if (login) {
+      this.setState({
+        menuOptions: [
+          {
+            path: '/',
+            label: 'Home',
+          },
+        ],
+      });
+    } else {
+      this.setState({
+        menuOptions: [
+          {
+            path: '/',
+            label: 'Home',
+          },
+          {
+            path: '/login',
+            label: 'Login',
+          },
+          {
+            path: '/signup',
+            label: 'Signup',
+          },
+        ],
+      });
+    }
+  };
 
   render() {
     return (
@@ -60,8 +58,8 @@ export default class App extends Component {
           <Route component={() => <Menu data={this.state.menuOptions} />} />
           {/* Se coloca una function arrow para poder pasarle parametros al componente */}
           <Route path="/" exact component={() => <Home />} />
-          <Route path="/login" exact component={()=><Login menuHandle={this.handleMenu}/>} />
-          <Route path="/signup" exact component={Signup}></Route>
+          <Route path="/login" exact component={() => <Login>{{menu:this.handleMenu}}</Login>} />
+          <Route path="/signup" exact component={() => <Signup />}></Route>
         </BrowserRouter>
       </div>
     );

@@ -1,44 +1,26 @@
-import React, { useState } from 'react';
-import {useHistory} from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { withFormik } from 'formik';
 import Axios from 'axios';
 import { Card, Button, Form, Container, Spinner } from 'react-bootstrap';
-import FormGroup from '../Components/FormGroup'
+import FormGroup from '../Components/FormGroup';
 
-export default function Signup() {
+function Signup(props) {
+  const {
+    handleSubmit,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    values,
+    errors,
+    touched,
+    status,
+  } = props;
+  //redicreccionar luego del submit
   const history = useHistory();
-  const [form, setForm] = useState({ name: '', lastname: '', user: '', password: '', email: '' });
-  const [errors, setErrors] = useState({ name: '', lastname: '', user: '', password: '', email: '' })
-  const [loading, setLoading] = useState(false);
-  const handleSubmit = (e) => {
-      if(form.name == ''){
-        setErrors({...errors, name: 'Name is required'})
-      }
-    setLoading(true);
-    Axios.post('http://localhost:3001/users/signin', form, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        setLoading(false);
-        history.push('/')
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err.response);
-      });
-    e.preventDefault();
-  };
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-    e.preventDefault();
-  };
+  if (status && !isSubmitting) {
+    history.push('/login');
+  }
 
   return (
     <Container className="d-flex justify-content-center pt-4">
@@ -46,19 +28,68 @@ export default function Signup() {
         <Card.Body>
           <Card.Title className="text-center">Signup</Card.Title>
           <Form onSubmit={handleSubmit}>
-              <FormGroup label={'Name'} type={'text'} placeholder={'Name'} name={'name'} value={form.name} change={handleChange} errors={errors.name}/>
+            <FormGroup
+              label={'Name'}
+              type={'text'}
+              placeholder={'Name'}
+              name={'name'}
+              value={values.name}
+              change={handleChange}
+              blur={handleBlur}
+              errors={errors.name}
+              touched={touched.name}
+            />
 
-              <FormGroup label={'Lastname'} type={'text'} placeholder={'Lastname'} name={'lastname'} value={form.lastname} change={handleChange}/>
+            <FormGroup
+              label={'Lastname'}
+              type={'text'}
+              placeholder={'Lastname'}
+              name={'lastname'}
+              value={values.lastname}
+              change={handleChange}
+              blur={handleBlur}
+              errors={errors.lastname}
+              touched={touched.lastname}
+            />
 
-              <FormGroup label={'User'} type={'text'} placeholder={'User'} name={'user'} value={form.user} change={handleChange}/> 
+            <FormGroup
+              label={'User'}
+              type={'text'}
+              placeholder={'User'}
+              name={'user'}
+              value={values.user}
+              change={handleChange}
+              blur={handleBlur}
+              errors={errors.user}
+              touched={touched.user}
+            />
 
-              <FormGroup label={'Password'} type={'password'} placeholder={'Password'} name={'password'} value={form.password} change={handleChange}/>
-            
-              <FormGroup label={'Email'} type={'email'} placeholder={'Email'} name={'email'} value={form.email} change={handleChange}/>
-            
-            <Button variant="success" type="submit" block>
-              {loading && <Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />}
-                Submit
+            <FormGroup
+              label={'Password'}
+              type={'password'}
+              placeholder={'Password'}
+              name={'password'}
+              value={values.password}
+              change={handleChange}
+              blur={handleBlur}
+              errors={errors.password}
+              touched={touched.password}
+            />
+
+            <FormGroup
+              label={'Email'}
+              type={'email'}
+              placeholder={'Email'}
+              name={'email'}
+              value={values.email}
+              change={handleChange}
+              blur={handleBlur}
+              errors={errors.email}
+              touched={touched.email}
+            />
+
+            <Button disabled={isSubmitting} variant="success" type="submit" block>
+              Submit
             </Button>
           </Form>
         </Card.Body>
@@ -66,3 +97,55 @@ export default function Signup() {
     </Container>
   );
 }
+
+export default withFormik({
+  mapPropsToValues(props) {
+    return {
+      name: '',
+      lastname: '',
+      user: '',
+      password: '',
+      email: '',
+    };
+  },
+  validate(values) {
+    const errors = {};
+    if (!values.password) {
+      errors.password = 'Password is required';
+    } else if (values.password.length < 6) {
+      errors.password = 'Password mush be at least 6 characters';
+    }
+    if (!values.name) {
+      errors.name = 'Name is required';
+    }
+    if (!values.lastname) {
+      errors.lastname = 'Lastname is required';
+    }
+    if (!values.user) {
+      errors.user = 'User is required';
+    }
+    if (!values.email) {
+      errors.email = 'Required';
+    }
+    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
+    }
+    return errors;
+  },
+  handleSubmit(values, formikBag) {
+    Axios.post('http://localhost:3001/users/signin', values, {
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+    formikBag.setSubmitting(false);
+    formikBag.setStatus(true);
+  },
+})(Signup);
