@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { withFormik } from 'formik';
 import Axios from 'axios';
 import { Card, Button, Form, Container, Spinner } from 'react-bootstrap';
 import FormGroup from '../Components/FormGroup';
+import NetContext from '../Context/NetContext'
 
 function Login(props) {
+  const context = useContext(NetContext)
   const { handleSubmit, isSubmitting, handleChange, handleBlur, values, errors, touched, status } = props;
   //redicreccionar luego del submit
   const history = useHistory();
-  const menuHandle = props.children.menu;
   if (status && !isSubmitting) {
-    menuHandle(true);
+    context.loginUser()
     history.push('/');
     console.log(props.children)
   }
@@ -76,6 +77,7 @@ export default withFormik({
     return errors;
   },
   handleSubmit(values, formikBag) {
+    
     Axios.post('http://localhost:3001/users/login', values, {
       headers: {
         'content-type': 'application/json',
@@ -84,6 +86,7 @@ export default withFormik({
       .then((res) => {
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('user_id', res.data.user_id);
+        
         console.log(res);
         console.log(res.data);
       })
