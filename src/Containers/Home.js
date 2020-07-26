@@ -28,9 +28,7 @@ class Home extends Component {
         {this.state.loading && <div>Loading ...</div>}
         {!this.state.loading && (
           <div>
-            {this.state.products.map((producto) => (
-              <Products data={[producto]} />
-            ))}
+              <Products data={this.state.products} />
           </div>
         )}
       </div>
