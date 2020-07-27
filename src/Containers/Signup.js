@@ -1,38 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { withFormik } from 'formik';
-import Axios from 'axios';
-import { Card, Button, Form, Container, Spinner } from 'react-bootstrap';
-import FormGroup from '../Components/FormGroup';
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { withFormik } from "formik";
+import Axios from "axios";
+import {UserSingup} from '../Services/UserService'
+import { Card, Button, Form, Container, Spinner } from "react-bootstrap";
+
+import FormGroup from "../Components/FormGroup";
 
 function Signup(props) {
-  const {
-    handleSubmit,
-    isSubmitting,
-    handleChange,
-    handleBlur,
-    values,
-    errors,
-    touched,
-    status,
-  } = props;
+  const { handleSubmit, isSubmitting, handleChange, handleBlur, values, errors, touched, status } = props;
   //redicreccionar luego del submit
   const history = useHistory();
   if (status && !isSubmitting) {
-    history.push('/login');
+    history.push("/login");
   }
 
   return (
     <Container className="d-flex justify-content-center pt-4">
-      <Card bg="light" text="dark" style={{ width: '25rem' }}>
+      <Card bg="light" text="dark" style={{ width: "25rem" }}>
         <Card.Body>
           <Card.Title className="text-center">Signup</Card.Title>
           <Form onSubmit={handleSubmit}>
             <FormGroup
-              label={'Name'}
-              type={'text'}
-              placeholder={'Name'}
-              name={'name'}
+              label={"Name"}
+              type={"text"}
+              placeholder={"Name"}
+              name={"name"}
               value={values.name}
               change={handleChange}
               blur={handleBlur}
@@ -41,10 +34,10 @@ function Signup(props) {
             />
 
             <FormGroup
-              label={'Lastname'}
-              type={'text'}
-              placeholder={'Lastname'}
-              name={'lastname'}
+              label={"Lastname"}
+              type={"text"}
+              placeholder={"Lastname"}
+              name={"lastname"}
               value={values.lastname}
               change={handleChange}
               blur={handleBlur}
@@ -53,10 +46,10 @@ function Signup(props) {
             />
 
             <FormGroup
-              label={'User'}
-              type={'text'}
-              placeholder={'User'}
-              name={'user'}
+              label={"User"}
+              type={"text"}
+              placeholder={"User"}
+              name={"user"}
               value={values.user}
               change={handleChange}
               blur={handleBlur}
@@ -65,10 +58,10 @@ function Signup(props) {
             />
 
             <FormGroup
-              label={'Password'}
-              type={'password'}
-              placeholder={'Password'}
-              name={'password'}
+              label={"Password"}
+              type={"password"}
+              placeholder={"Password"}
+              name={"password"}
               value={values.password}
               change={handleChange}
               blur={handleBlur}
@@ -77,10 +70,10 @@ function Signup(props) {
             />
 
             <FormGroup
-              label={'Email'}
-              type={'email'}
-              placeholder={'Email'}
-              name={'email'}
+              label={"Email"}
+              type={"email"}
+              placeholder={"Email"}
+              name={"email"}
               value={values.email}
               change={handleChange}
               blur={handleBlur}
@@ -101,51 +94,40 @@ function Signup(props) {
 export default withFormik({
   mapPropsToValues(props) {
     return {
-      name: '',
-      lastname: '',
-      user: '',
-      password: '',
-      email: '',
+      name: "",
+      lastname: "",
+      user: "",
+      password: "",
+      email: ""
     };
   },
   validate(values) {
     const errors = {};
     if (!values.password) {
-      errors.password = 'Password is required';
+      errors.password = "Password is required";
     } else if (values.password.length < 6) {
-      errors.password = 'Password mush be at least 6 characters';
+      errors.password = "Password mush be at least 6 characters";
     }
     if (!values.name) {
-      errors.name = 'Name is required';
+      errors.name = "Name is required";
     }
     if (!values.lastname) {
-      errors.lastname = 'Lastname is required';
+      errors.lastname = "Lastname is required";
     }
     if (!values.user) {
-      errors.user = 'User is required';
+      errors.user = "User is required";
     }
     if (!values.email) {
-      errors.email = 'Required';
+      errors.email = "Required";
     }
     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-      errors.email = 'Invalid email address';
+      errors.email = "Invalid email address";
     }
     return errors;
   },
-  handleSubmit(values, formikBag) {
-    Axios.post('http://localhost:3001/users/signin', values, {
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+  async handleSubmit(values, formikBag) {
+    UserSingup(values);
     formikBag.setSubmitting(false);
     formikBag.setStatus(true);
-  },
+  }
 })(Signup);

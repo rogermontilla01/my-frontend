@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
-import Products from './Products';
+import React, { Component } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
+import Products from "./Products";
+import { getProds } from "../Services/ProductsService";
 
 class Home extends Component {
   constructor() {
@@ -9,17 +10,21 @@ class Home extends Component {
     //Declarar el estado
     this.state = {
       products: [],
-      loading: true,
+      loading: true
     };
   }
-  componentDidMount() {
-    axios.get('http://localhost:3001/products/').then((res) => {
-      console.log(res)
+  async componentDidMount() {
+    let prods = await getProds();
+    if (prods.data.docs != undefined) {
       this.setState({
-        products: res.data.docs,
-        loading: false,
+        products: prods.data.docs,
+        loading: false
       });
-    });
+    } else {
+      this.setState({
+        loading: true
+      });
+    }
   }
 
   render() {
@@ -28,7 +33,7 @@ class Home extends Component {
         {this.state.loading && <div>Loading ...</div>}
         {!this.state.loading && (
           <div>
-              <Products data={this.state.products} />
+            <Products data={this.state.products} />
           </div>
         )}
       </div>

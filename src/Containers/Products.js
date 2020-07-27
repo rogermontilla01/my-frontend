@@ -1,9 +1,16 @@
 import React from 'react';
 import { Container, Row, Col, Card, CardGroup, Button } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
-import context from 'react-bootstrap/esm/AccordionContext';
+import {UserSales} from '../Services/UserService'
 
 export default function Products({ data }) {
+  const handleSale = async (e, value)=>{
+    e.preventDefault();
+    await UserSales({
+      'user_id':localStorage.getItem('user_id'),
+      'productsList':[value]
+    })
+  }
   return (
     <NetContext.Consumer>
       {(context) => (
@@ -17,7 +24,7 @@ export default function Products({ data }) {
                     <Card.Body>
                       <Card.Title>{prod.name}</Card.Title>
                       <Card.Text>{prod.description.substring(0, 20).concat('...')}</Card.Text>
-                      {context.login && <Button variant="primary">Go somewhere</Button>}
+                      {context.login && <Button variant="primary" onClick={(e)=>handleSale(e, prod._id)}>Comprar</Button>}
                     </Card.Body>
                   </Card>
                 </Col>
