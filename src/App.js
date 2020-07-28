@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Home from './Containers/Home';
 import Login from './Containers/Login';
+import ShowProds from './Containers/ShowProds';
 import Menu from './Layout/Menu';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Signup from './Containers/Signup';
@@ -25,6 +26,7 @@ export default class App extends Component {
             <Route path="/" exact component={() => <Home />} />
             <Route path="/login" exact component={() => <Login></Login>} />
             <Route path="/signup" exact component={() => <Signup />}></Route>
+            <Route path="/prods-detail/:id" exact component={ShowProds}/>
           </BrowserRouter>
         </GlobalState>
       </div>
