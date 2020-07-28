@@ -18,6 +18,11 @@ class GlobalState extends Component {
     });
     localStorage.removeItem('login');
   };
+  addProd = data => {
+    this.setState({
+      productsList: []
+    })
+  }
 
   render() {
     return (
