@@ -1,17 +1,23 @@
-import React from 'react';
+import React, {} from 'react';
 import { Container, Row, Col, Card, CardGroup, Button, ButtonGroup } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
 import { UserSales } from '../Services/UserService';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Products({ data }) {
-  const handleSale = async (e, value) => {
-    e.preventDefault();
-    await UserSales({
-      user_id: localStorage.getItem('user_id'),
-      productsList: [value],
-    });
+  const history = useHistory();
+  const goCheckout = (id) => {
+    localStorage.setItem('prods', [localStorage.getItem('prods'), id]);
+    history.push('/checkout')
   };
+
+  // const handleSale = async (e, value) => {
+  //   e.preventDefault();
+  //   await UserSales({
+  //     user_id: localStorage.getItem('user_id'),
+  //     productsList: [value],
+  //   });
+  // };
   return (
     <NetContext.Consumer>
       {(context) => (
@@ -48,7 +54,13 @@ export default function Products({ data }) {
                       {context.login && (
                         <div style={{ textAlign: 'center' }}>
                           <ButtonGroup size="sm">
-                            <Button variant="success" onClick={(e) => handleSale(e, prod._id)}>
+                            <Button
+                              variant="success"
+                              //onClick={() => context.addProd(prod._id)}
+                              onClick={() => {
+                                goCheckout(prod._id);
+                              }}
+                            >
                               Buy Now
                             </Button>
                             <Button as={Link} to={'/prods-detail/' + prod._id} variant="success">
@@ -67,4 +79,16 @@ export default function Products({ data }) {
       )}
     </NetContext.Consumer>
   );
+}
+
+{
+  /* <Button
+  onClick={() => {
+    let prods = localStorage.getItem('prods').split(',');
+    prods.splice(0, 1);
+    console.log(prods);
+  }}
+>
+  prods
+</Button>; */
 }

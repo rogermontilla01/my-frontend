@@ -11,3 +11,12 @@ export function getProdById(id) {
     timeout: 5000,
   });
 }
+
+export function getProdsByList(list){
+  return axiosIns.get('products/by-list/', {
+    timeout: 5000,
+    params: {
+      list: list,
+    }
+  })
+}

@@ -7,6 +7,7 @@ import Menu from './Layout/Menu';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Signup from './Containers/Signup';
 import GlobalState from './Context/GlobalState';
+import Checkout from './Containers/Checkout'
 
 export default class App extends Component {
   constructor() {
@@ -27,6 +28,7 @@ export default class App extends Component {
             <Route path="/login" exact component={() => <Login></Login>} />
             <Route path="/signup" exact component={() => <Signup />}></Route>
             <Route path="/prods-detail/:id" exact component={ShowProds}/>
+            <Route path='/checkout' exact component={Checkout}/>
           </BrowserRouter>
         </GlobalState>
       </div>
