@@ -19,15 +19,50 @@ export default function Checkout() {
       setProdsCheckout({
         loading: true,
         prods: prods.data,
+        list: createList(prods.data), //Lista de Productos con cantidad
       });
     };
     fetchData();
   }, [reload]);
 
+  // Create Quantity List
+
+  var count = (prods, item) => {
+    let cantidad = 0;
+    prods.forEach((prod) => {
+      if (prod == item) {
+        cantidad += 1;
+      }
+    });
+    return cantidad;
+  };
+
+  var createList = (data) => {
+    let price = 0
+    let prods = localStorage.getItem('prods').split(',');
+    var List = data.map((item) => {
+      if(item.offert){
+        price = item.offert
+      }else{
+        price = item.price
+      }
+      return {
+        id: item._id,
+        name: item.name,
+        price: price,
+        quantity: count(prods, item._id),
+      };
+    });
+    console.log('Prod List => ', List);
+    return List;
+  };
+
   return (
     <div>
       {prodsCheckout && console.log('ProdsCheckOut =>', prodsCheckout)}
-      {prodsCheckout.loading && <CheckoutProds data={prodsCheckout.prods} reload={setReload}></CheckoutProds>}
+      {prodsCheckout.loading && (
+        <CheckoutProds data={prodsCheckout.prods} reload={setReload} list={prodsCheckout.list}></CheckoutProds>
+      )}
     </div>
   );
 }
