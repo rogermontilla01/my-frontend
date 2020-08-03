@@ -1,23 +1,18 @@
-import React, {} from 'react';
-import { Container, Row, Col, Card, CardGroup, Button, ButtonGroup } from 'react-bootstrap';
+import React from 'react';
+import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
-import { UserSales } from '../Services/UserService';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function Products({ data }) {
   const history = useHistory();
   const goCheckout = (id) => {
     localStorage.setItem('prods', [localStorage.getItem('prods'), id]);
-    history.push('/checkout')
+    history.push('/checkout');
+  };
+  const addProd = (id) => {
+    localStorage.setItem('prods', [localStorage.getItem('prods'), id]);
   };
 
-  // const handleSale = async (e, value) => {
-  //   e.preventDefault();
-  //   await UserSales({
-  //     user_id: localStorage.getItem('user_id'),
-  //     productsList: [value],
-  //   });
-  // };
   return (
     <NetContext.Consumer>
       {(context) => (
@@ -55,17 +50,18 @@ export default function Products({ data }) {
                         <div style={{ textAlign: 'center' }}>
                           <ButtonGroup size="sm">
                             <Button
+                              style={{ fontSize: '12px', padding: '4px' }}
                               variant="success"
-                              //onClick={() => context.addProd(prod._id)}
                               onClick={() => {
                                 goCheckout(prod._id);
                               }}
                             >
                               Buy Now
                             </Button>
-                            <Button as={Link} to={'/prods-detail/' + prod._id} variant="success">
+                            <Button as={Link} to={'/prods-detail/' + prod._id} variant="success" style={{fontSize: '12px', padding: '4px' }}>
                               Detail
                             </Button>
+                            <Button onClick={() => addProd(prod._id)} variant='success' style={{fontSize: '12px', padding: '4px' }}>Add to Car</Button>
                           </ButtonGroup>
                         </div>
                       )}

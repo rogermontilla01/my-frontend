@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { UserSales } from '../Services/UserService';
 import { Container, Row, Col, Card, CardGroup, Button, ButtonGroup, ListGroup } from 'react-bootstrap';
 
 export default function CheckoutProds({ data, reload, list }) {
-  var Total = 0;
+  var total = 0;
 
   list.forEach((element) => {
     if (element.offert) {
-      Total += element.offert * element.quantity;
+      total += element.offert * element.quantity;
     } else {
-      Total += element.price * element.quantity;
+      total += element.price * element.quantity;
     }
   });
 
@@ -19,6 +20,16 @@ export default function CheckoutProds({ data, reload, list }) {
     });
     console.log('actual =>', filter);
     localStorage.setItem('prods', filter);
+    reload(true);
+  };
+
+  const purchase = (list) => {
+    let data = {
+      user_id: localStorage.getItem('user_id'),
+      productsList: list,
+    }
+    UserSales(data);
+    localStorage.setItem('prods', [''])
     reload(true);
   };
 
@@ -88,7 +99,7 @@ export default function CheckoutProds({ data, reload, list }) {
         </Col>
         <Col md={4} sm={12}>
           <Card style={{ position: 'fixed', marginTop: '5px', minWidth: '300px' }}>
-            <Card.Header style={{textAlign: 'center' }}>Total</Card.Header>
+            <Card.Header style={{ textAlign: 'center' }}>Total</Card.Header>
             <Card.Body>
               {list.map((item) => {
                 return (
@@ -97,8 +108,8 @@ export default function CheckoutProds({ data, reload, list }) {
                   </div>
                 );
               })}
-              <div style={{ fontSize: '16px', marginTop:'1rem' }}>Totale General: {Total}</div>
-              <Button size="sm" variant="success" block style={{ marginTop: '1rem' }}>
+              <div style={{ fontSize: '16px', marginTop: '1rem' }}>Totale General: {total}</div>
+              <Button size="sm" variant="success" block style={{ marginTop: '1rem' }} onClick={()=>{purchase(list)}}>
                 Comprar
               </Button>
             </Card.Body>
