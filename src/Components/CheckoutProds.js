@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { UserSales } from '../Services/UserService';
-import { Container, Row, Col, Card, CardGroup, Button, ButtonGroup, ListGroup } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 export default function CheckoutProds({ data, reload, list }) {
+  //Calcular el total de la compra segun cantidad de productos
   var total = 0;
-
   list.forEach((element) => {
     if (element.offert) {
       total += element.offert * element.quantity;
@@ -23,6 +23,7 @@ export default function CheckoutProds({ data, reload, list }) {
     reload(true);
   };
 
+  //Realizar la compra
   const purchase = (list) => {
     let data = {
       user_id: localStorage.getItem('user_id'),
@@ -101,14 +102,17 @@ export default function CheckoutProds({ data, reload, list }) {
           <Card style={{ position: 'fixed', marginTop: '5px', minWidth: '300px' }}>
             <Card.Header style={{ textAlign: 'center' }}>Total</Card.Header>
             <Card.Body>
+              <ListGroup  variant='flush'>
               {list.map((item) => {
                 return (
-                  <div style={{ fontSize: '12px' }}>
-                    {item.name}: {item.price * item.quantity}
-                  </div>
+                  <ListGroup.Item style={{ fontSize: '14px', paddingTop:'0.5rem', paddingBottom:'0.5rem', paddingLeft: '0px'}}>
+                    <strong>{item.name}</strong>: {item.price * item.quantity}
+                  </ListGroup.Item>
                 );
               })}
-              <div style={{ fontSize: '16px', marginTop: '1rem' }}>Totale General: {total}</div>
+              </ListGroup>
+              
+              <div style={{ fontSize: '16px', marginTop: '1rem' }}><strong>Totale General: </strong>{total}</div>
               <Button size="sm" variant="success" block style={{ marginTop: '1rem' }} onClick={()=>{purchase(list)}}>
                 Comprar
               </Button>

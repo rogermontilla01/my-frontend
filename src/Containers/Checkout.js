@@ -9,6 +9,10 @@ export default function Checkout() {
   });
   const [reload, setReload] = useState(true);
   useEffect(() => {
+    //para evitar el error de prods vacio
+    if(localStorage.getItem('prods') == undefined){
+      localStorage.setItem('prods', [''])
+    }
     setReload(false);
     var prods = localStorage.getItem('prods').split(',');
     var prodsCheck = prods.filter((item) => {
@@ -25,8 +29,7 @@ export default function Checkout() {
     fetchData();
   }, [reload]);
 
-  // Create Quantity List
-
+  // Funcion para contar los elementos en el array
   var count = (prods, item) => {
     let cantidad = 0;
     prods.forEach((prod) => {
@@ -36,7 +39,7 @@ export default function Checkout() {
     });
     return cantidad;
   };
-
+// Funcion para crear una lista de elementos con cantidad y precio
   var createList = (data) => {
     let price = 0
     let prods = localStorage.getItem('prods').split(',');
