@@ -1,16 +1,30 @@
-import React from 'react';
-import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, ButtonGroup, Toast } from 'react-bootstrap';
+import ToastMessage from '../Components/ToastMessage';
 import NetContext from '../Context/NetContext';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function Products({ data }) {
+  const [show, setShow] = useState(false);
+
   const history = useHistory();
-  const goCheckout = (id) => {
-    localStorage.setItem('prods', [localStorage.getItem('prods'), id]);
+  const goCheckout = (prod) => {
+    addProd(prod);
     history.push('/checkout');
+    console.log(JSON.parse(localStorage.getItem('prods')));
   };
-  const addProd = (id) => {
-    localStorage.setItem('prods', [localStorage.getItem('prods'), id]);
+  const addProd = (prod) => {
+    let prodsArr = [];
+    if (localStorage.getItem('prods') == undefined) {
+      prodsArr.push(prod);
+      localStorage.setItem('prods', JSON.stringify(prodsArr));
+    } else {
+      prodsArr = JSON.parse(localStorage.getItem('prods'));
+      prodsArr.push(prod);
+      localStorage.setItem('prods', JSON.stringify(prodsArr));
+    }
+    console.log(prodsArr);
+    setShow(true);
   };
 
   return (
@@ -53,15 +67,26 @@ export default function Products({ data }) {
                               style={{ fontSize: '12px', padding: '4px' }}
                               variant="success"
                               onClick={() => {
-                                goCheckout(prod._id);
+                                goCheckout(prod);
                               }}
                             >
                               Buy Now
                             </Button>
-                            <Button as={Link} to={'/prods-detail/' + prod._id} variant="success" style={{fontSize: '12px', padding: '4px' }}>
+                            <Button
+                              as={Link}
+                              to={'/prods-detail/' + prod._id}
+                              variant="success"
+                              style={{ fontSize: '12px', padding: '4px' }}
+                            >
                               Detail
                             </Button>
-                            <Button onClick={() => addProd(prod._id)} variant='success' style={{fontSize: '12px', padding: '4px' }}>Add to Car</Button>
+                            <Button
+                              onClick={() => addProd(prod)}
+                              variant="success"
+                              style={{ fontSize: '12px', padding: '4px' }}
+                            >
+                              Add to Car
+                            </Button>
                           </ButtonGroup>
                         </div>
                       )}
@@ -71,20 +96,11 @@ export default function Products({ data }) {
               );
             })}
           </Row>
+          <div style={{ position: 'fixed', bottom: '0', width: '100%' }}>
+            <ToastMessage show={show} setShow={setShow} event={'Product added succesfully'}/>
+          </div>
         </Container>
       )}
     </NetContext.Consumer>
   );
-}
-
-{
-  /* <Button
-  onClick={() => {
-    let prods = localStorage.getItem('prods').split(',');
-    prods.splice(0, 1);
-    console.log(prods);
-  }}
->
-  prods
-</Button>; */
 }

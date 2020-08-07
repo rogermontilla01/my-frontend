@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import ToastMessage from '../Components/ToastMessage';
 import { UserSales } from '../Services/UserService';
 import { Container, Row, Col, Card, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { deleteProd } from '../Middlewares/CheckoutMiddleware';
 
-export default function CheckoutProds({ data, reload, list }) {
-  //Calcular el total de la compra segun cantidad de productos
-  var total = 0;
-  list.forEach((element) => {
-    if (element.offert) {
-      total += element.offert * element.quantity;
-    } else {
-      total += element.price * element.quantity;
-    }
-  });
+export default function CheckoutProds({ data, reload, total }) {
+  const [show, setShow] = useState(false);
 
-  const deleteProd = (Element) => {
-    var actualProds = localStorage.getItem('prods').split(',');
-    var filter = actualProds.filter((item) => {
-      return item != Element && item != '';
-    });
-    console.log('actual =>', filter);
-    localStorage.setItem('prods', filter);
+  const deleteElement = (id) => {
+    setShow(true)
+    deleteProd(id);
     reload(true);
   };
 
@@ -28,9 +18,10 @@ export default function CheckoutProds({ data, reload, list }) {
     let data = {
       user_id: localStorage.getItem('user_id'),
       productsList: list,
-    }
+    };
     UserSales(data);
-    localStorage.setItem('prods', [''])
+    localStorage.removeItem('prods');
+    setShow(true)
     reload(true);
   };
 
@@ -65,16 +56,9 @@ export default function CheckoutProds({ data, reload, list }) {
                             <p style={{ marginBottom: '5px' }}>Price: {data.price}</p>
                           </div>
                         )}
-                        {list.map((item) => {
-                          let total = 0;
-                          if (item.id == data._id) {
-                            return (
-                              <div key={item.id} style={{ fontSize: '12px' }}>
-                                <p key={item.id}>Cantidad: {item.quantity} </p>
-                              </div>
-                            );
-                          }
-                        })}
+                        <div style={{ fontSize: '12px' }}>
+                          <p style={{ marginBottom: '5px' }}>Quantity: {data.purchase}</p>
+                        </div>
                       </div>
                     </Card.Body>
                     <div
@@ -86,7 +70,7 @@ export default function CheckoutProds({ data, reload, list }) {
                         variant="danger"
                         block
                         onClick={() => {
-                          deleteProd(data._id);
+                          deleteElement(data.id);
                         }}
                       >
                         Delete
@@ -102,24 +86,49 @@ export default function CheckoutProds({ data, reload, list }) {
           <Card style={{ position: 'fixed', marginTop: '5px', minWidth: '300px' }}>
             <Card.Header style={{ textAlign: 'center' }}>Total</Card.Header>
             <Card.Body>
-              <ListGroup  variant='flush'>
-              {list.map((item) => {
-                return (
-                  <ListGroup.Item style={{ fontSize: '14px', paddingTop:'0.5rem', paddingBottom:'0.5rem', paddingLeft: '0px'}}>
-                    <strong>{item.name}</strong>: {item.price * item.quantity}
-                  </ListGroup.Item>
-                );
-              })}
+              <ListGroup variant="flush">
+                {data.map((item) => {
+                  return (
+                    <ListGroup.Item
+                      style={{ fontSize: '14px', paddingTop: '0.5rem', paddingBottom: '0.5rem', paddingLeft: '0px' }}
+                    >
+                      {item.offert && (
+                        <div>
+                          <strong>{item.name}</strong>: {item.offert * item.purchase}
+                        </div>
+                      )}
+                      {!item.offert && (
+                        <div>
+                          <strong>{item.name}</strong>: {item.price * item.purchase}
+                        </div>
+                      )}
+                    </ListGroup.Item>
+                  );
+                })}
               </ListGroup>
-              
-              <div style={{ fontSize: '16px', marginTop: '1rem' }}><strong>Totale General: </strong>{total}</div>
-              <Button size="sm" variant="success" block style={{ marginTop: '1rem' }} onClick={()=>{purchase(list)}}>
+
+              <div style={{ fontSize: '16px', marginTop: '1rem' }}>
+                <strong>Totale General: </strong>
+                {total}
+              </div>
+              <Button
+                size="sm"
+                variant="success"
+                block
+                style={{ marginTop: '1rem' }}
+                onClick={() => {
+                  purchase(data);
+                }}
+              >
                 Comprar
               </Button>
             </Card.Body>
           </Card>
         </Col>
       </Row>
+      <div style={{ position: 'fixed', bottom: '0', width: '100%' }}>
+        <ToastMessage show={show} setShow={setShow} event={'Product deleted successfully'}/>
+      </div>
     </Container>
   );
 }
