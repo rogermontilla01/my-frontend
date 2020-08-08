@@ -13,6 +13,10 @@ function Login(props) {
   const history = useHistory();
   if (status && !isSubmitting) {
     context.loginUser()
+    context.setToast({
+      showToast: true,
+      eventToast: 'Successful login'
+    });
     history.push('/');
     console.log(props.children)
   }
@@ -21,7 +25,7 @@ function Login(props) {
     <Container className="d-flex justify-content-center pt-4">
       <Card bg="light" text="dark" style={{ width: '25rem' }}>
         <Card.Body>
-          <Card.Title className="text-center">Signup</Card.Title>
+          <Card.Title className="text-center">Login</Card.Title>
           <Form onSubmit={handleSubmit}>
             <FormGroup
               label={'User'}

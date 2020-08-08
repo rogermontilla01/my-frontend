@@ -4,6 +4,8 @@ import NetContext from './NetContext';
 class GlobalState extends Component {
   state = {
     login: localStorage.getItem('login'),
+    showToast: false,
+    eventToast: '',
   };
   loginUser = (data) => {
     this.setState({
@@ -17,6 +19,13 @@ class GlobalState extends Component {
     });
     localStorage.removeItem('login');
   };
+  setToast = (eventToast)=>{
+    this.setState({
+      showToast: eventToast.showToast,
+      eventToast: eventToast.eventToast,
+    })
+  }
+
 
   render() {
     return (
@@ -25,6 +34,9 @@ class GlobalState extends Component {
           login: this.state.login,
           loginUser: this.loginUser,
           logoutUser: this.logoutUser,
+          setToast: this.setToast,
+          showToast: this.state.showToast,
+          eventToast: this.state.eventToast,
         }}
       >
         {this.props.children}

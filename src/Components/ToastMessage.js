@@ -1,18 +1,36 @@
 import React, { useState } from 'react';
-import * as ReactDOM from 'react-dom';
 import Toast from 'react-bootstrap/Toast';
-import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
+import NetContext from '../Context/NetContext';
 
-export default function ToastMessage({show, setShow, event}) {
-  
-
+export default function ToastMessage() {
   return (
-    <Toast style={{marginLeft:'25%', marginRight:'40%', background:'#D4EDDA' }} onClose={() => setShow(false)} show={show} delay={3000} autohide>
-      <Toast.Header>
-        <img style={{ height: '1rem', width: '1rem' }} src={process.env.PUBLIC_URL + '/success.png'}  className="rounded mr-2" alt="" />
-        <strong className="mr-auto">{event}</strong>
-        <small>1 second ago</small>
-      </Toast.Header>
-    </Toast>
+    <NetContext.Consumer>
+      {(context) => (
+        <div className='fixed-bottom'>
+          <Toast
+            style={{ marginLeft: '35%', background: '#D4EDDA', marginBottom: '1rem' }}
+            onClose={() =>
+              context.setToast({
+                showToast: false,
+              })
+            }
+            show={context.showToast}
+            delay={3000}
+            autohide
+          >
+            <Toast.Header>
+              <img
+                style={{ height: '1rem', width: '1rem' }}
+                src={process.env.PUBLIC_URL + '/success.png'}
+                className="rounded mr-2"
+                alt=""
+              />
+              <strong className="mr-auto">{context.eventToast}</strong>
+              <small>1 second ago</small>
+            </Toast.Header>
+          </Toast>
+        </div>
+      )}
+    </NetContext.Consumer>
   );
 }

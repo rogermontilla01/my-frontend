@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, ButtonGroup, Toast } from 'react-bootstrap';
-import ToastMessage from '../Components/ToastMessage';
+import React,{useContext} from 'react';
+import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function Products({ data }) {
-  const [show, setShow] = useState(false);
-
+  const context = useContext(NetContext)
   const history = useHistory();
   const goCheckout = (prod) => {
     addProd(prod);
@@ -23,13 +21,14 @@ export default function Products({ data }) {
       prodsArr.push(prod);
       localStorage.setItem('prods', JSON.stringify(prodsArr));
     }
+    context.setToast({
+      showToast: true,
+      eventToast: 'Product added successfully'
+    });
     console.log(prodsArr);
-    setShow(true);
   };
 
   return (
-    <NetContext.Consumer>
-      {(context) => (
         <Container>
           <Row md={12}>
             {data.map((prod) => {
@@ -81,7 +80,9 @@ export default function Products({ data }) {
                               Detail
                             </Button>
                             <Button
-                              onClick={() => addProd(prod)}
+                              onClick={() => {
+                                addProd(prod);
+                              }}
                               variant="success"
                               style={{ fontSize: '12px', padding: '4px' }}
                             >
@@ -96,11 +97,6 @@ export default function Products({ data }) {
               );
             })}
           </Row>
-          <div style={{ position: 'fixed', bottom: '0', width: '100%' }}>
-            <ToastMessage show={show} setShow={setShow} event={'Product added succesfully'}/>
-          </div>
         </Container>
-      )}
-    </NetContext.Consumer>
   );
 }
