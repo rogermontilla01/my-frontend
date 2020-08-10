@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getProdById } from '../Services/ProductsService';
 import ProdsDetail from '../Components/ProdsDetail'
 
-export default class ShowProds extends Component {
+export default class ShowDetail extends Component {
   constructor() {
     
     super();

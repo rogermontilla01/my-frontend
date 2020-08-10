@@ -22,6 +22,7 @@ export function removeDuplicates(prods, prop){
     return newArray;
   };
 
+//Contar productos
 function count(prods, item){
     let quantity = 0;
     prods.forEach((prod) => {
@@ -32,6 +33,7 @@ function count(prods, item){
     return quantity;
   };
 
+// calcular total a mostrar
 export function total(prods){
   var total = 0;
   prods.forEach((element)=>{
@@ -45,6 +47,7 @@ export function total(prods){
   return total;
 }
 
+//Eliminar prodcuto del local storage
 export function deleteProd(Element){
   var actualProds = JSON.parse(localStorage.getItem('prods'));
   var filter = actualProds.filter((item) => {
@@ -55,5 +58,20 @@ export function deleteProd(Element){
   }else{
     localStorage.setItem('prods', JSON.stringify(filter))
   }  
+};
+
+//Agregar producto al localstorage
+export function addProd(prod){
+  let prodsArr = [];
+  if (localStorage.getItem('prods') == undefined) {
+    prodsArr.push(prod);
+    localStorage.setItem('prods', JSON.stringify(prodsArr));
+  } else {
+    prodsArr = JSON.parse(localStorage.getItem('prods'));
+    prodsArr.push(prod);
+    localStorage.setItem('prods', JSON.stringify(prodsArr));
+  }
+  
+  console.log(prodsArr);
 };
 

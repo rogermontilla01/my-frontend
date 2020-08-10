@@ -6,8 +6,14 @@ export function getProds() {
   });
 }
 
+//Tuve que agregar el token aca porque axios me da un error de jwt malformed, parece que no actualiza la instancia
 export function getProdById(id) {
-  return axiosIns.get('products/' + id, {
+  return axiosIns.get('products/by-id/' + id, {
+    headers: {
+      common: {
+        'x-access-token': localStorage.getItem('token')
+      }
+    },
     timeout: 5000,
   });
 }

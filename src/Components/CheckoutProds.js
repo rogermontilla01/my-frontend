@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import NetContext from '../Context/NetContext';
 import { UserSales } from '../Services/UserService';
 import { Container, Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
-import { deleteProd } from '../Middlewares/CheckoutMiddleware';
+import { deleteProd } from '../Middlewares/ProductMiddleware';
 
 export default function CheckoutProds({ data, reload, total }) {
   const context = useContext(NetContext)
@@ -95,6 +95,7 @@ export default function CheckoutProds({ data, reload, total }) {
                     {data.map((item) => {
                       return (
                         <ListGroup.Item
+                        key={item.id}
                           style={{
                             fontSize: '14px',
                             paddingTop: '0.5rem',

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { removeDuplicates, total } from '../Middlewares/CheckoutMiddleware';
+import { removeDuplicates, total } from '../Middlewares/ProductMiddleware';
 import CheckoutProds from '../Components/CheckoutProds';
 import ToastMessage from '../Components/ToastMessage';
-//import { getProdsByList } from '../Services/ProductsService';
+
 import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 

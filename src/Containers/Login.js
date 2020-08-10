@@ -18,7 +18,6 @@ function Login(props) {
       eventToast: 'Successful login'
     });
     history.push('/');
-    console.log(props.children)
   }
 
   return (

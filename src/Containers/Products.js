@@ -1,32 +1,27 @@
 import React,{useContext} from 'react';
 import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
+import { addProd } from '../Middlewares/ProductMiddleware';
 import { Link, useHistory } from 'react-router-dom';
 
 export default function Products({ data }) {
   const context = useContext(NetContext)
   const history = useHistory();
+ 
   const goCheckout = (prod) => {
     addProd(prod);
     history.push('/checkout');
     console.log(JSON.parse(localStorage.getItem('prods')));
   };
-  const addProd = (prod) => {
-    let prodsArr = [];
-    if (localStorage.getItem('prods') == undefined) {
-      prodsArr.push(prod);
-      localStorage.setItem('prods', JSON.stringify(prodsArr));
-    } else {
-      prodsArr = JSON.parse(localStorage.getItem('prods'));
-      prodsArr.push(prod);
-      localStorage.setItem('prods', JSON.stringify(prodsArr));
-    }
+  
+  const addNewProd = (prod)=>{
+    addProd(prod)
     context.setToast({
       showToast: true,
       eventToast: 'Product added successfully'
     });
-    console.log(prodsArr);
-  };
+  }
+  
 
   return (
         <Container>
@@ -81,7 +76,7 @@ export default function Products({ data }) {
                             </Button>
                             <Button
                               onClick={() => {
-                                addProd(prod);
+                                addNewProd(prod);
                               }}
                               variant="success"
                               style={{ fontSize: '12px', padding: '4px' }}

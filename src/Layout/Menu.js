@@ -48,6 +48,15 @@ const Menu = ({ data }) => {
                 alt="logo"
               />
             </Navbar.Brand>
+            <Navbar.Brand style={{marginLeft: '1rem'}} href="/user-panel">
+              <img
+                src={process.env.PUBLIC_URL + '/usuario.png'}
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+                alt="logo"
+              />
+            </Navbar.Brand>
           </Navbar.Collapse>
         </Navbar>
       )}
