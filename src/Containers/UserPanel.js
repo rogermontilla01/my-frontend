@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserById, getUserSales } from '../Services/UserService';
 import UserPanelComponent from '../Components/UserPanelComponent';
-import { useField } from 'formik';
+
 export default function UserPanel() {
   const [userFile, setUserFile] = useState({ loading: false, user: [], sales: [] });
 

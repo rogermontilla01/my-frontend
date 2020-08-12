@@ -11,6 +11,7 @@ import UserPanel from './Containers/UserPanel';
 import GlobalState from './Context/GlobalState';
 import Checkout from './Containers/Checkout';
 import ToastMessage from './Components/ToastMessage';
+import AboutContainer from './Containers/AboutContainer';
 
 export default class App extends Component {
   constructor() {
@@ -32,6 +33,7 @@ export default class App extends Component {
             <Route path="/signup" exact component={() => <Signup />}></Route>
             <Route path="/prods-detail/:id" exact component={ShowDetail} />
             <Route path="/checkout" exact component={Checkout} />
+            <Route path="/about" exact component={AboutContainer} />
             <Route component={() => <Footer></Footer>} />
           </BrowserRouter>
         </GlobalState>
