@@ -12,6 +12,7 @@ import GlobalState from './Context/GlobalState';
 import Checkout from './Containers/Checkout';
 import ToastMessage from './Components/ToastMessage';
 import AboutContainer from './Containers/AboutContainer';
+import HistoryContainer from './Containers/HistoryContainer';
 
 export default class App extends Component {
   constructor() {
@@ -34,6 +35,7 @@ export default class App extends Component {
             <Route path="/prods-detail/:id" exact component={ShowDetail} />
             <Route path="/checkout" exact component={Checkout} />
             <Route path="/about" exact component={AboutContainer} />
+            <Route path="/history" exact component={HistoryContainer} />
             <Route component={() => <Footer></Footer>} />
           </BrowserRouter>
         </GlobalState>

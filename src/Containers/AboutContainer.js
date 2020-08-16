@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getStatics } from '../Services/StaticsService';
-import AboutComponent from '../Components/AboutComponent'
+import StaticComponent from '../Components/StaticComponent'
 
 export default function AboutContainer() {
   const [staticPages, setStaticPages] = useState({ loading: false, about: '' });
@@ -14,5 +14,5 @@ export default function AboutContainer() {
     };
     fetchData();
   }, []);
-  return <div>{staticPages.loading && <AboutComponent aboutData={staticPages.about}/>}</div>;
+  return <div>{staticPages.loading && <StaticComponent data={staticPages.about}/>}</div>;
 }

@@ -27,6 +27,9 @@ export default function Footer() {
         <Nav.Link as={Link} to={'/about'}>
           About
         </Nav.Link>
+        <Nav.Link as={Link} to={'/history'}>
+          History
+        </Nav.Link>
       </Navbar>
     </footer>
   );
