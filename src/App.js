@@ -22,7 +22,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{position:"relative", minHeight:"100vh"}}>
         <GlobalState>
           <BrowserRouter>
             <Route component={() => <Menu />} />

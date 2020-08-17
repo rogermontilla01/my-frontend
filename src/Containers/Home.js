@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import Products from "./Products";
-import { getProds } from "../Services/ProductsService";
+import React, { Component } from 'react';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import Products from './Products';
+import { getProds, getProdByPrice, getCategories } from '../Services/ProductsService';
 
 class Home extends Component {
   constructor() {
@@ -10,19 +10,48 @@ class Home extends Component {
     //Declarar el estado
     this.state = {
       products: [],
-      loading: true
+      categories: [],
+      loading: true,
     };
   }
-  async componentDidMount() {
-    let prods = await getProds();
+  componentDidMount() {
+    this.getElements()
+  }
+  
+  clearFilter(){
+    this.getElements()
+  }
+
+  async filterProducts(min, max, category) {
+    let prods = await getProdByPrice(min, max, category);
+    console.log(prods);
     if (prods.data.docs != undefined) {
       this.setState({
         products: prods.data.docs,
-        loading: false
+        loading: false,
       });
     } else {
       this.setState({
-        loading: true
+        loading: true,
+      });
+    }
+  }
+
+  
+
+  async getElements(){
+    let prods = await getProds();
+    let categ = await getCategories();
+    if (prods.data.docs != undefined && categ != undefined) {
+      this.setState({
+        products: prods.data.docs,
+        categories: categ.data,
+        loading: false,
+      });
+      console.log(this.state);
+    } else {
+      this.setState({
+        loading: true,
       });
     }
   }
@@ -33,7 +62,12 @@ class Home extends Component {
         {this.state.loading && <div>Loading ...</div>}
         {!this.state.loading && (
           <div>
-            <Products data={this.state.products} />
+            <Products
+              data={this.state.products}
+              filterProducts={(min, max, category) => this.filterProducts(min, max, category)}
+              categories={this.state.categories}
+              clearFilter={()=>this.clearFilter()}
+            />
           </div>
         )}
       </div>

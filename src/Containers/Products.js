@@ -1,31 +1,115 @@
-import React,{useContext} from 'react';
-import { Container, Row, Col, Card, Button, ButtonGroup } from 'react-bootstrap';
+import React, { useContext, useState } from 'react';
+import { Container, Row, Col, Card, Button, ButtonGroup, Form } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
 import { addProd } from '../Middlewares/ProductMiddleware';
 import { Link, useHistory } from 'react-router-dom';
 
-export default function Products({ data }) {
-  const context = useContext(NetContext)
+export default function Products({ data, filterProducts, categories, clearFilter }) {
+  const [priceFilter, setPriceFilter] = useState({
+    min: 0,
+    max: 0,
+    category: 'All',
+  });
+
+  const handleInputChange = (event) => {
+    setPriceFilter({
+      ...priceFilter,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const sendData = (event) => {
+    event.preventDefault();
+    filterProducts(priceFilter.min, priceFilter.max, priceFilter.category);
+  };
+
+  const clearElements = () => {
+    clearFilter();
+    setPriceFilter({
+      min: 0,
+      max: 0,
+      category: 'All',
+    });
+    console.log('hola');
+  };
+
+  const context = useContext(NetContext);
   const history = useHistory();
- 
+
   const goCheckout = (prod) => {
     addProd(prod);
     history.push('/checkout');
     console.log(JSON.parse(localStorage.getItem('prods')));
   };
-  
-  const addNewProd = (prod)=>{
-    addProd(prod)
+
+  const addNewProd = (prod) => {
+    addProd(prod);
     context.setToast({
       showToast: true,
-      eventToast: 'Product added successfully'
+      eventToast: 'Product added successfully',
     });
-  }
-  
+  };
 
   return (
-        <Container>
-          <Row md={12}>
+    <Container fluid>
+      <Row md={12}>
+        <Col md={3}>
+          <Card style={{ width: '18rem', marginTop: '1rem', alignItems: 'left', marginLeft: '1rem' }}>
+            <Card.Body>
+              <Card.Title className="text-center mb-4">Shop by Category</Card.Title>
+              <Form onSubmit={sendData}>
+                <Form.Control
+                  style={{ width: '100%' }}
+                  className="mb-2 mr-sm-2"
+                  size="sm"
+                  placeholder="Min price"
+                  value={priceFilter.min}
+                  onChange={handleInputChange}
+                  name="min"
+                />
+                <Form.Control
+                  style={{ width: '100%' }}
+                  className="mb-2 mr-sm-2"
+                  size="sm"
+                  placeholder="Max price"
+                  value={priceFilter.max}
+                  onChange={handleInputChange}
+                  name="max"
+                />
+                <Form.Control
+                  style={{ width: '100%' }}
+                  className="mb-2 mr-sm-2"
+                  size="sm"
+                  as="select"
+                  value={priceFilter.category}
+                  onChange={handleInputChange}
+                  name="category"
+                >
+                  <option>All</option>;
+                  {categories.map((item) => {
+                    return <option value={item._id}>{item.subname}</option>;
+                  })}
+                </Form.Control>
+
+                <Button
+                  type="submit"
+                  className="mb-2 mt-2"
+                  size="sm"
+                  block
+                  disabled={priceFilter.max == 0 && priceFilter.category == 'All' ? true : false}
+                >
+                  Filter Products
+                </Button>
+
+                <Button onClick={clearElements} className="mb-2" size="sm" block>
+                  Clear
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={9}>
+          <Row>
             {data.map((prod) => {
               return (
                 <Col xl={3} lg={4} md={6} xs={12} key={prod._id}>
@@ -92,6 +176,8 @@ export default function Products({ data }) {
               );
             })}
           </Row>
-        </Container>
+        </Col>
+      </Row>
+    </Container>
   );
 }

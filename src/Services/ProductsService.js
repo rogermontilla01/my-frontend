@@ -11,19 +11,36 @@ export function getProdById(id) {
   return axiosIns.get('products/by-id/' + id, {
     headers: {
       common: {
-        'x-access-token': localStorage.getItem('token')
-      }
+        'x-access-token': localStorage.getItem('token'),
+      },
     },
     timeout: 5000,
   });
 }
 
-/*Revisar la funcion de abajo en el servido express, parece que ya no la necesito*/
-// export function getProdsByList(list){
-//   return axiosIns.get('products/by-list/', {
-//     timeout: 5000,
-//     params: {
-//       list: list,
-//     }
-//   })
-// }
+export function getProdByPrice(min, max, category) {
+  return axiosIns.get('products/filter-price/', {
+    headers: {
+      common: {
+        'x-access-token': localStorage.getItem('token'),
+      },
+    },
+    timeout: 5000,
+    params: {
+      min: min,
+      max: max,
+      category: category,
+    },
+  });
+}
+
+export function getCategories(min, max) {
+  return axiosIns.get('/subcategory/list/', {
+    headers: {
+      common: {
+        'x-access-token': localStorage.getItem('token'),
+      },
+    },
+    timeout: 5000,
+  });
+}
