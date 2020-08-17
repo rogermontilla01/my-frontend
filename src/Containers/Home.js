@@ -1,25 +1,39 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
 import Products from './Products';
-import { getProds, getProdByPrice, getCategories } from '../Services/ProductsService';
+import { getProds, getProdByPrice, getCategories, globalSearch } from '../Services/ProductsService';
 
 class Home extends Component {
-  constructor() {
+  constructor(props) {
     super();
     //Declarar el estado
     this.state = {
       products: [],
       categories: [],
+      prodSearch: '',
+      reloadSearch: false,
       loading: true,
     };
   }
+
   componentDidMount() {
-    this.getElements()
+    this.getElements();
   }
-  
-  clearFilter(){
-    this.getElements()
+
+  componentDidUpdate() {
+    if(localStorage.getItem('search') !== undefined && localStorage.getItem('search') !== ""){
+      this.productsSearch(localStorage.getItem('search'))
+    }
+  }
+
+  clearFilter() {
+    this.getElements();
+  }
+
+  async productsSearch(name) {
+    let prods = await globalSearch(name);
+    console.log('Prods: ', prods);
+    this.setState({products: prods.data.products})
+    localStorage.setItem('search', "")
   }
 
   async filterProducts(min, max, category) {
@@ -37,9 +51,7 @@ class Home extends Component {
     }
   }
 
-  
-
-  async getElements(){
+  async getElements() {
     let prods = await getProds();
     let categ = await getCategories();
     if (prods.data.docs != undefined && categ != undefined) {
@@ -66,7 +78,7 @@ class Home extends Component {
               data={this.state.products}
               filterProducts={(min, max, category) => this.filterProducts(min, max, category)}
               categories={this.state.categories}
-              clearFilter={()=>this.clearFilter()}
+              clearFilter={() => this.clearFilter()}
             />
           </div>
         )}

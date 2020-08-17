@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import NetContext from '../Context/NetContext';
 
 const Menu = ({ data }) => {
+  const history = useHistory();
+
+  const [searchItem, setSearchItem] = useState({
+    name: '',
+  });
+
+  const handleSubmit = (event) => {
+    setSearchItem({
+      ...searchItem,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const sendData = (event) => {
+    event.preventDefault();
+    localStorage.setItem('search', searchItem.name)
+    history.push('/');
+  };
 
   return (
     <NetContext.Consumer>
@@ -35,11 +53,17 @@ const Menu = ({ data }) => {
                 </>
               )}
             </Nav>
-            <Form inline>
-              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-              <Button variant="outline-success">Search</Button>
+            <Form onSubmit={sendData} inline>
+              <FormControl
+                type="text"
+                placeholder="Search"
+                className="mr-sm-2"
+                onChange={handleSubmit}
+                name="name"
+              />
+              <Button type="submit" variant="outline-success">Search</Button>
             </Form>
-            <Navbar.Brand style={{marginLeft: '2rem'}} href="/checkout">
+            <Navbar.Brand style={{ marginLeft: '2rem' }} href="/checkout">
               <img
                 src={process.env.PUBLIC_URL + '/shopper.png'}
                 width="30"
@@ -48,7 +72,7 @@ const Menu = ({ data }) => {
                 alt="logo"
               />
             </Navbar.Brand>
-            <Navbar.Brand style={{marginLeft: '1rem'}} href="/user-panel">
+            <Navbar.Brand style={{ marginLeft: '1rem' }} href="/user-panel">
               <img
                 src={process.env.PUBLIC_URL + '/usuario.png'}
                 width="30"

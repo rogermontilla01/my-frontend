@@ -44,3 +44,21 @@ export function getCategories(min, max) {
     timeout: 5000,
   });
 }
+
+export function globalSearch(name) {
+  return axiosIns.get('/products/by-name', {
+    headers: {
+      common: {
+        'x-access-token': localStorage.getItem('token'),
+      },
+    },
+    timeout: 5000,
+    params: {
+      name: name,
+    },
+  });
+}
+
+function escapeRegex(Search) {
+  return Search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
