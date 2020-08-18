@@ -9,8 +9,7 @@ class Home extends Component {
     this.state = {
       products: [],
       categories: [],
-      prodSearch: '',
-      reloadSearch: false,
+      pagination: [],
       loading: true,
     };
   }
@@ -27,6 +26,10 @@ class Home extends Component {
 
   clearFilter() {
     this.getElements();
+  }
+
+  changePage(pageNumber){
+    this.getElements(pageNumber)
   }
 
   async productsSearch(name) {
@@ -51,16 +54,25 @@ class Home extends Component {
     }
   }
 
-  async getElements() {
-    let prods = await getProds();
+  async getElements(pageNumber) {
+    let prods = await getProds(pageNumber ? pageNumber:1);
     let categ = await getCategories();
     if (prods.data.docs != undefined && categ != undefined) {
       this.setState({
         products: prods.data.docs,
         categories: categ.data,
+        pagination: {
+          hasNextPage: prods.data.hasNextPage,
+          hasPrevPage: prods.data.hasPrevPage,
+          nextPage: prods.data.nextPage,
+          page: prods.data.page,
+          prevPage: prods.data.prevPage,
+          totalPages: prods.data.totalPages,
+        },
         loading: false,
       });
       console.log(this.state);
+      console.log('Data pagination: ', this.state.pagination)
     } else {
       this.setState({
         loading: true,
@@ -79,6 +91,8 @@ class Home extends Component {
               filterProducts={(min, max, category) => this.filterProducts(min, max, category)}
               categories={this.state.categories}
               clearFilter={() => this.clearFilter()}
+              changePage={(pageNumber)=> this.changePage(pageNumber)}
+              paginationData={this.state.pagination}
             />
           </div>
         )}

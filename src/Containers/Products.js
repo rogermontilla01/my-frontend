@@ -2,9 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Container, Row, Col, Card, Button, ButtonGroup, Form } from 'react-bootstrap';
 import NetContext from '../Context/NetContext';
 import { addProd } from '../Middlewares/ProductMiddleware';
+import PaginationBar from '../Layout/PaginationBar'
 import { Link, useHistory } from 'react-router-dom';
 
-export default function Products({ data, filterProducts, categories, clearFilter }) {
+export default function Products({ data, filterProducts, categories, clearFilter, changePage, paginationData }) {
   const [priceFilter, setPriceFilter] = useState({
     min: 0,
     max: 0,
@@ -175,6 +176,9 @@ export default function Products({ data, filterProducts, categories, clearFilter
                 </Col>
               );
             })}
+            <div style={{width:'100%', paddingBottom:'2rem'}} className='text-center'>
+              <PaginationBar changePage={(pageNumber)=>changePage(pageNumber)} paginationData={paginationData}/>
+            </div>
           </Row>
         </Col>
       </Row>

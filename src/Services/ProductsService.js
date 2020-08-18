@@ -1,7 +1,7 @@
 import axiosIns from '../Config/axios';
 
-export function getProds() {
-  return axiosIns.get('products/', {
+export function getProds(pageNumber) {
+  return axiosIns.get('products/?page='+pageNumber, {
     timeout: 5000,
   });
 }
