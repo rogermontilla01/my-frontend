@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pagination, Button, ButtonGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Button, ButtonGroup } from 'react-bootstrap';
 
 export default function PaginationBar({ changePage, paginationData }) {
   const [paginate, setPaginate] = useState({
@@ -18,7 +17,7 @@ export default function PaginationBar({ changePage, paginationData }) {
 
   for (let number = 1; number <= paginate.pagesData.totalPages; number++) {
     items.push(
-      <Button key={number} variant="secondary" onClick={() => changePage(number)} active={number === paginate.pagesData.page} >
+      <Button key={number} variant="secondary" onClick={() => changePage(number)} active={number == paginate.pagesData.page} >
         {number}
       </Button>
     );

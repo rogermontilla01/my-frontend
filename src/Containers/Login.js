@@ -1,21 +1,21 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { withFormik } from 'formik';
 import Axios from 'axios';
-import { Card, Button, Form, Container, Spinner } from 'react-bootstrap';
+import { Card, Button, Form, Container } from 'react-bootstrap';
 import FormGroup from '../Components/FormGroup';
-import NetContext from '../Context/NetContext'
+import NetContext from '../Context/NetContext';
 
 function Login(props) {
-  const context = useContext(NetContext)
+  const context = useContext(NetContext);
   const { handleSubmit, isSubmitting, handleChange, handleBlur, values, errors, touched, status } = props;
   //redicreccionar luego del submit
   const history = useHistory();
   if (status && !isSubmitting) {
-    context.loginUser()
+    context.loginUser();
     context.setToast({
       showToast: true,
-      eventToast: 'Successful login'
+      eventToast: 'Successful login',
     });
     history.push('/');
   }
@@ -80,23 +80,23 @@ export default withFormik({
     return errors;
   },
   handleSubmit(values, formikBag) {
-    
     Axios.post('http://localhost:3001/users/login', values, {
       headers: {
         'content-type': 'application/json',
       },
     })
       .then((res) => {
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user_id', res.data.user_id);
-        
-        console.log(res);
-        console.log(res.data);
+        if (res.data.token == undefined) {
+          formikBag.setErrors({ user: 'user or password invalid', password: 'user or password invalid' });
+        } else {
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('user_id', res.data.user_id);
+          formikBag.setSubmitting(false);
+          formikBag.setStatus(true);
+        }
       })
       .catch((err) => {
         console.log(err.response);
       });
-    formikBag.setSubmitting(false);
-    formikBag.setStatus(true);
   },
 })(Login);

@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 
 export default function Footer() {
   var style = {
+    justifyContent: 'center',
     backgroundColor: '#F8F8F8',
     borderTop: '1px solid #E7E7E7',
-    textAlign: 'center',
     padding: '10px',
-    left: '0',
     bottom: '0',
     height: '50px',
     width: '100%',
@@ -24,6 +23,7 @@ export default function Footer() {
     <div style={{ paddingBottom: '2.5rem' }}>
       <footer style={footerStyle}>
         <Navbar style={style}>
+          <div>© 2010 - 2020 | RM SRL - Todos los derechos reservados</div>
           <Nav.Link as={Link} to={'/about'}>
             About
           </Nav.Link>

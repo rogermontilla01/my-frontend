@@ -88,7 +88,7 @@ export default function Products({ data, filterProducts, categories, clearFilter
                 >
                   <option>All</option>;
                   {categories.map((item) => {
-                    return <option value={item._id}>{item.subname}</option>;
+                    return <option key={item._id} value={item._id}>{item.subname}</option>;
                   })}
                 </Form.Control>
 
@@ -126,6 +126,9 @@ export default function Products({ data, filterProducts, categories, clearFilter
                     <Card.Body style={{ width: '14rem', textAlign: 'left' }}>
                       <h6>{prod.name}</h6>
                       <p>{prod.description.substring(0, 20).concat('...')}</p>
+                      <div style={{ fontSize: '12px', marginBottom:'5px' }}>
+                      Category: {prod.subcategory.subname}
+                      </div>
                       {prod.offert && (
                         <div style={{ fontSize: '12px' }}>
                           <p style={{ color: 'red', marginBottom: '5px' }}>

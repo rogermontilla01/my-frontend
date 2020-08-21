@@ -58,7 +58,3 @@ export function globalSearch(name) {
     },
   });
 }
-
-function escapeRegex(Search) {
-  return Search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-}

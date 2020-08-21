@@ -36,7 +36,7 @@ const Menu = ({ data }) => {
                   <Nav.Link as={Link} to={'/'}>
                     Home
                   </Nav.Link>
-                  <Nav.Link onClick={context.logoutUser}>Logout</Nav.Link>
+                  <Nav.Link onClick={context.logoutUser} as={Link} to={'/'}>Logout</Nav.Link>
                 </>
               )}
               {!context.login && (

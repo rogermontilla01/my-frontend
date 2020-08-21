@@ -1,6 +1,6 @@
 import React from 'react';
 import { addProd } from '../Middlewares/ProductMiddleware';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Container, Card, Button, Row, Col, ButtonGroup } from 'react-bootstrap';
 
 export default function ProdsDetail({ data }) {

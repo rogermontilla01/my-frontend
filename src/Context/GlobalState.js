@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import NetContext from './NetContext';
 
+
+
 class GlobalState extends Component {
   state = {
     login: localStorage.getItem('login'),
@@ -13,11 +15,13 @@ class GlobalState extends Component {
     });
     localStorage.setItem('login', true);
   };
-  logoutUser = (data) => {
+  logoutUser = () => {
     this.setState({
       login: false,
     });
     localStorage.removeItem('login');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('token')
   };
   setToast = (eventToast)=>{
     this.setState({

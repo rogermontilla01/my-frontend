@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Styles/quill.css'
-import {Container, Row, Col} from 'react-bootstrap'
+import {Container,} from 'react-bootstrap'
 export default function StaticComponent({ data }) {
 
 
