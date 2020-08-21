@@ -10,8 +10,8 @@ export default function UserPanelComponent({ userData, userSales }) {
   var total = 0;
   userSales.forEach((item) => {
     item.products.forEach((prod) => {
-      total += prod.price;
-      prodsSales.push({ name: prod.name, price: prod.price, date: item.date.substring(0, 10) });
+      total += prod.price*prod.quantity;
+      prodsSales.push({ name: prod.name, price: prod.price, quantity: prod.quantity, date: item.date.substring(0, 10) });
     });
   });
 
@@ -35,6 +35,7 @@ export default function UserPanelComponent({ userData, userSales }) {
                 <th>#</th>
                 <th>Product</th>
                 <th>Date</th>
+                <th>Quantity</th>
                 <th>Price</th>
               </tr>
             </thead>
@@ -45,15 +46,16 @@ export default function UserPanelComponent({ userData, userSales }) {
                     <td key={index}>{index + 1}</td>
                     <td key={item.name}>{item.name}</td>
                     <td key={item.date}>{item.date}</td>
-                    <td key={item.price}>{formatter.format(item.price)}</td>
+                    <td key={item.quantity}>{item.quantity}</td>
+                    <td key={item.price}>{formatter.format(item.price*item.quantity)}</td>
                   </tr>
                 );
               })}
             </tbody>
             <thead>
               <tr>
-                <th colSpan="3">Total: </th>
-                <th colSpan="3">{formatter.format(total)}</th>
+                <th colSpan="4">Total: </th>
+                <th>{formatter.format(total)}</th>
               </tr>
             </thead>
           </Table>
